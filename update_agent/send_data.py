@@ -51,7 +51,9 @@ settings_file.close()
 # ----------------------------------------------------------------------------------------------------
 # Log into the Imersia API
 # ----------------------------------------------------------------------------------------------------
-def ImersiaLogin ():
+
+
+def ImersiaLogin():
     payload = {'Email': email, 'Password': pwd}
     req = requests.post(authurl, data=payload)
 
@@ -65,9 +67,12 @@ def ImersiaLogin ():
 # ----------------------------------------------------------------------------------------------------
 # Send a command to the Imersia API
 # ----------------------------------------------------------------------------------------------------
-def SendCommand (command, parameters):
+
+
+def SendCommand(command, parameters):
     query = json.dumps(parameters)
-    headers = {'sessionid' : sessionid, 'user' : email, 'developerid' : 'tempproject'}
+    headers = {'sessionid': sessionid,
+               'user': email, 'developerid': 'tempproject'}
     req = requests.post(apiurl + command + '?' + query, headers=headers)
     return (req.text)
 # ----------------------------------------------------------------------------------------------------
@@ -75,29 +80,38 @@ def SendCommand (command, parameters):
 # ----------------------------------------------------------------------------------------------------
 # Main Function
 # ----------------------------------------------------------------------------------------------------
-sessionid = ImersiaLogin ()
+sessionid = ImersiaLogin()
 
 if (sessionid == ""):
     print ("Error logging in")
 else:
     print ("Logged in - sessionid is : " + sessionid)
 
-    # Post a value to set the water level (0 to 10) and trigger the devices watching
-    result = SendCommand ('agent/metadata/setvalue', {'agentid': treeID, 'key': 'waterlevel', 'value': random.randint(0,10)})
+    # Post a value to set the water level (0 to 10) and trigger the devices
+    # watching
+    result = SendCommand('agent/metadata/setvalue',
+                         {'agentid': treeID, 'key': 'waterlevel', 'value': random.randint(0, 10)})
     print (result)
 
-    # Post a value to set the pollution level (0 to 5) and trigger the devices watching
-    result = SendCommand ('agent/metadata/setvalue', {'agentid': treeID, 'key': 'pollutionlevel', 'value': random.randint(0,5)})
+    # Post a value to set the pollution level (0 to 5) and trigger the devices
+    # watching
+    result = SendCommand('agent/metadata/setvalue',
+                         {'agentid': treeID, 'key': 'pollutionlevel', 'value': random.randint(0, 5)})
     print (result)
 
-    # Post a value to set the windspeed level (0 to 10) and trigger the devices watching
-    result = SendCommand ('agent/metadata/setvalue', {'agentid': treeID, 'key': 'windspeed', 'value': random.randint(0,10)})
+    # Post a value to set the windspeed level (0 to 10) and trigger the
+    # devices watching
+    result = SendCommand('agent/metadata/setvalue',
+                         {'agentid': treeID, 'key': 'windspeed', 'value': random.randint(0, 10)})
     print (result)
 
-    # Post a value to set the particlespeed level (0 to 10) and trigger the devices watching
-    result = SendCommand ('agent/metadata/setvalue', {'agentid': treeID, 'key': 'particlespeed', 'value': random.randint(0,10)})
+    # Post a value to set the particlespeed level (0 to 10) and trigger the
+    # devices watching
+    result = SendCommand('agent/metadata/setvalue',
+                         {'agentid': treeID, 'key': 'particlespeed', 'value': random.randint(0, 10)})
     print (result)
 
     # Send an event to the analytics system to mark this update
-    result = SendCommand ('agent/analytics/log', {'agentid': treeID, 'geohash' : geohash, 'event': 'valuesupdated'})
+    result = SendCommand(
+        'agent/analytics/log', {'agentid': treeID, 'geohash': geohash, 'event': 'valuesupdated'})
     print (result)
