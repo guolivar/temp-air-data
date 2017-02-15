@@ -131,6 +131,7 @@ no2 = max(no2_glen["NumericValue"],
 
 # The data from LAWA is only updated hourly so to fill up the time
 # so, add a loop to update the agent with some noise over the data
+print("Date ",pm10_glen["DateTime"])
 print("PM10 ", pm10)
 print("NO2 ", no2)
 # Log in to Imersia's sytem
@@ -140,23 +141,19 @@ for i in (1, 2, 3, 4, 5):
     # Extract pm10 and no2 from a wide normal distribution
     noisy_pm10 = random.lognormvariate(math.log(pm10), 0.1)
     noisy_no2 = random.lognormvariate(math.log(no2), 0.1)
-    print("Noisy PM10 ", noisy_pm10)
-    print("Noisy NO2 ", noisy_no2)
     level_pm10 = round(10 * (noisy_pm10 / 100))
     level_no2 = round(5 * (noisy_no2 / 80))
-    print(level_no2)
-    print(level_pm10)
+    print("NO2 level ",level_no2)
+    print("PM10 level ",level_pm10)
     # Update the pollution
     # Post a value to set the pollution level (0 to 5) and trigger the devices
     # watching
     result = SendCommand('agent/metadata/setvalue',
                          {'agentid': treeID, 'key': 'pollutionlevel', 'value': level_no2})
-    print (result)
     # Update the particles
     # Post a value to set the particlespeed level (0 to 10) and trigger the
     # devices watching
     result = SendCommand('agent/metadata/setvalue',
                          {'agentid': treeID, 'key': 'particlespeed', 'value': level_pm10})
-    print (result)
-    time.sleep(8.2)
+    time.sleep(8)
 print("--- %s seconds ---" % (time.time() - start_time))
