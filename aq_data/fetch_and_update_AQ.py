@@ -182,3 +182,4 @@ print("--- %s seconds ---" % (time.time() - start_time))
 # Update thingspeak channel
 options = {'api_key':writekey,'field1':pm10,'field2':no2}
 req = requests.post(thingspk,data=options)
+print(req)

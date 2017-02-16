@@ -130,3 +130,4 @@ for i in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10):
 # Update thingspeak channel
 options = {'api_key':writekey,'field3':wsp,'field4':rh}
 req = requests.post(thingspk,data=options)
+print(req)
