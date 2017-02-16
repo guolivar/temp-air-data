@@ -141,8 +141,8 @@ for i in (1, 2, 3, 4, 5):
     # Extract pm10 and no2 from a wide normal distribution
     noisy_pm10 = random.lognormvariate(math.log(pm10), 0.1)
     noisy_no2 = random.lognormvariate(math.log(no2), 0.1)
-    level_pm10 = round(10 * (noisy_pm10 / 100))
-    level_no2 = round(5 * (noisy_no2 / 80))
+    level_pm10 = min(round(10 * (max(0,noisy_pm10-10) / 90)),10)
+    level_no2 = min(round(5 * (max(0,noisy_no2-20) / 60)),5)
     print("NO2 level ",level_no2)
     print("PM10 level ",level_pm10)
     # Update the pollution
