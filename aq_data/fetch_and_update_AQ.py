@@ -9,6 +9,7 @@ import json
 import time
 import random
 import math
+
 # Start timer
 start_time = time.time()
 # Auxiliary functions
@@ -42,6 +43,26 @@ email = settings_line[1]
 # Read the Password
 settings_line = settings_file.readline().rstrip('\n').split(',')
 pwd = settings_line[1]
+# Read the OpenWeatherMap key
+settings_line = settings_file.readline().rstrip('\n').split(',')
+owm_key = settings_line[1]
+# Read the CityID to fetch from OWM
+settings_line = settings_file.readline().rstrip('\n').split(',')
+cityID = settings_line[1]
+# Thingspeak address
+settings_line = settings_file.readline().rstrip('\n').split(',')
+thingspk = settings_line[1]
+# Thingspeak channel
+settings_line = settings_file.readline().rstrip('\n').split(',')
+channel = settings_line[1]
+# Thinkgspeak readkey
+settings_line = settings_file.readline().rstrip('\n').split(',')
+readkey = settings_line[1]
+# Thinkgspeak writekey
+settings_line = settings_file.readline().rstrip('\n').split(',')
+writekey = settings_line[1]
+
+
 # Close the settings file
 settings_file.close()
 # ----------------------------------------------------------------------------------------------------
@@ -136,6 +157,7 @@ print("PM10 ", pm10)
 print("NO2 ", no2)
 # Log in to Imersia's sytem
 sessionid = ImersiaLogin()
+
 # Push data within the minute
 for i in (1, 2, 3, 4, 5):
     # Extract pm10 and no2 from a wide normal distribution
@@ -157,3 +179,6 @@ for i in (1, 2, 3, 4, 5):
                          {'agentid': treeID, 'key': 'particlespeed', 'value': level_pm10})
     time.sleep(8)
 print("--- %s seconds ---" % (time.time() - start_time))
+# Update thingspeak channel
+options = {'api_key':writekey,'field1':pm10,'field2':no2}
+req = requests.post(thingspk,data=options)
