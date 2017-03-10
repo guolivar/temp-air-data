@@ -118,7 +118,7 @@ for i in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10):
     # Extract pm10 and no2 from a wide normal distribution
     noisy_wsp = random.lognormvariate(math.log(wsp), 0.1)
     noisy_rh = random.lognormvariate(math.log(rh), 0.1)
-    level_wsp = min(round(10 * (max(0,noisy_wsp) / 7)),10)
+    level_wsp = min(round(10 * (max(0,noisy_wsp) / 8)),10)
     level_rh = min(round(10 * (max(0,noisy_rh-50) / 100)),10)
     print("Wind Speed level ",level_wsp)
     print("RH level ",level_rh)
