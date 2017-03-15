@@ -99,113 +99,105 @@ def SendCommand(command, parameters):
     return (req.text)
 # ----------------------------------------------------------------------------------------------------
 
-'''
-    Sites URLs
-    Takapuna:   https://api.waqi.info/feed/new-zealand/auckland/takapuna/?token=
-    Penrose:    https://api.waqi.info/feed/new-zealand/auckland/penrose/?token=
-    Henderson:  https://api.waqi.info/feed/new-zealand/auckland/henderson/?token=
-    Glen Eden:  https://api.waqi.info/feed/new-zealand/auckland/glen-eden/?token=
-    Pakuranga:  https://api.waqi.info/feed/new-zealand/auckland/pakuranga/?token=
-    Potumahoe:  https://api.waqi.info/feed/new-zealand/auckland/patumahoe/?token=
-'''
-# Fetch the data for PM10
-pm10_glen = requests.get(
-    'https://www.lawa.org.nz/umbraco/api/airservice/getLatestSample?baseUrlPageId=34260&featureOfInterest=67&indicator=pm10&timeIntervalText=Hours&timescaleText=Hourly').json()
-pm10_hend = requests.get(
-    'https://www.lawa.org.nz/umbraco/api/airservice/getLatestSample?baseUrlPageId=34260&featureOfInterest=5&indicator=pm10&timeIntervalText=Hours&timescaleText=Hourly').json()
-pm10_paku = requests.get(
-    'https://www.lawa.org.nz/umbraco/api/airservice/getLatestSample?baseUrlPageId=34260&featureOfInterest=1&indicator=pm10&timeIntervalText=Hours&timescaleText=Hourly').json()
-pm10_penr = requests.get(
-    'https://www.lawa.org.nz/umbraco/api/airservice/getLatestSample?baseUrlPageId=34260&featureOfInterest=7&indicator=pm10&timeIntervalText=Hours&timescaleText=Hourly').json()
-pm10_patu = requests.get(
-    'https://www.lawa.org.nz/umbraco/api/airservice/getLatestSample?baseUrlPageId=34260&featureOfInterest=2&indicator=pm10&timeIntervalText=Hours&timescaleText=Hourly').json()
-pm10_taka = requests.get(
-    'https://www.lawa.org.nz/umbraco/api/airservice/getLatestSample?baseUrlPageId=34260&featureOfInterest=23&indicator=pm10&timeIntervalText=Hours&timescaleText=Hourly').json()
+#    Sites URLs
+urlTakapuna = 'https://api.waqi.info/feed/new-zealand/auckland/takapuna/?token='
+urlPenrose = 'https://api.waqi.info/feed/new-zealand/auckland/penrose/?token='
+urlHenderson = 'https://api.waqi.info/feed/new-zealand/auckland/henderson/?token='
+urlGlenEden = 'https://api.waqi.info/feed/new-zealand/auckland/glen-eden/?token='
+urlPakuranga = 'https://api.waqi.info/feed/new-zealand/auckland/pakuranga/?token='
+urlPotumahoe = 'https://api.waqi.info/feed/new-zealand/auckland/patumahoe/?token='
+# Fetch the data
+glen = requests.get(urlGlenEden+aqicnkey).json()
+hend = requests.get(urlHenderson+aqicnkey).json()
+paku = requests.get(urlPakuranga+aqicnkey).json()
+penr = requests.get(urlPenrose+aqicnkey).json()
+patu = requests.get(urlPotumahoe+aqicnkey).json()
+taka = requests.get(urlTakapuna+aqicnkey).json()
 
-if pm10_glen is None:
+# Get PM10 values
+try:
+    pm10_glen_value = glen["data"]["iaqi"]['pm10']['v']
+except:
     pm10_glen_value = None
-else:
-    pm10_glen_value = pm10_glen["NumericValue"]
-if pm10_patu is None:
-    pm10_patu_value = None
-else:
-    pm10_patu_value = pm10_patu["NumericValue"]
-if pm10_hend is None:
+try:
+    pm10_hend_value = hend["data"]["iaqi"]['pm10']['v']
+except:
     pm10_hend_value = None
-else:
-    pm10_hend_value = pm10_hend["NumericValue"]
-if pm10_paku is None:
+try:
+    pm10_paku_value = paku["data"]["iaqi"]['pm10']['v']
+except:
     pm10_paku_value = None
-else:
-    pm10_paku_value = pm10_paku["NumericValue"]
-if pm10_taka is None:
-    pm10_taka_value = None
-else:
-    pm10_taka_value = pm10_taka["NumericValue"]
-if pm10_penr is None:
+try:
+    pm10_penr_value = penr["data"]["iaqi"]['pm10']['v']
+except:
     pm10_penr_value = None
-else:
-    pm10_penr_value = pm10_penr["NumericValue"]
+try:
+    pm10_patu_value = patu["data"]["iaqi"]['pm10']['v']
+except:
+    pm10_patu_value = None
+try:
+    pm10_taka_value = taka["data"]["iaqi"]['pm10']['v']
+except:
+    pm10_taka_value = None
 
 # Calculate the maximnum value
-pm10 = max(pm10_penr_value,
+pm10_i = max(pm10_penr_value,
         pm10_patu_value,
         pm10_hend_value,
         pm10_paku_value,
         pm10_taka_value,
         pm10_penr_value,
         1)
-
-# Fetch the data for NO2
-no2_glen = requests.get(
-    'https://www.lawa.org.nz/umbraco/api/airservice/getLatestSample?baseUrlPageId=34260&featureOfInterest=67&indicator=no2&timeIntervalText=Hours&timescaleText=Hourly').json()
-no2_hend = requests.get(
-    'https://www.lawa.org.nz/umbraco/api/airservice/getLatestSample?baseUrlPageId=34260&featureOfInterest=5&indicator=no2&timeIntervalText=Hours&timescaleText=Hourly').json()
-no2_quee = requests.get(
-    'https://www.lawa.org.nz/umbraco/api/airservice/getLatestSample?baseUrlPageId=34260&featureOfInterest=9&indicator=no2&timeIntervalText=Hours&timescaleText=Hourly').json()
-no2_penr = requests.get(
-    'https://www.lawa.org.nz/umbraco/api/airservice/getLatestSample?baseUrlPageId=34260&featureOfInterest=7&indicator=no2&timeIntervalText=Hours&timescaleText=Hourly').json()
-no2_taka = requests.get(
-    'https://www.lawa.org.nz/umbraco/api/airservice/getLatestSample?baseUrlPageId=34260&featureOfInterest=23&indicator=no2&timeIntervalText=Hours&timescaleText=Hourly').json()
-no2_patu = requests.get(
-    'https://www.lawa.org.nz/umbraco/api/airservice/getLatestSample?baseUrlPageId=34260&featureOfInterest=2&indicator=no2&timeIntervalText=Hours&timescaleText=Hourly').json()
-if no2_glen is None:
+# Convert back to concentration from AQI
+if pm10_i<51:
+    pm10 = (pm10_i - 0)*(54 - 0)/(50-0) + 0
+elif pm10_i<101:
+    pm10 = (pm10_i - 51)*(154 - 55)/(100-51) + 55
+elif pm10_i<151:
+    pm10 = (pm10_i - 101)*(254 - 155)/(150-101) + 155
+else:
+    pm10=300
+# Get NO2 data
+try:
+    no2_glen_value = glen["data"]["iaqi"]['no2']['v']
+except:
     no2_glen_value = None
-else:
-    no2_glen_value = no2_glen["NumericValue"]
-if no2_patu is None:
-    no2_patu_value = None
-else:
-    no2_patu_value = no2_patu["NumericValue"]
-if no2_hend is None:
+try:
+    no2_hend_value = hend["data"]["iaqi"]['no2']['v']
+except:
     no2_hend_value = None
-else:
-    no2_hend_value = no2_hend["NumericValue"]
-if no2_quee is None:
-    no2_quee_value = None
-else:
-    no2_quee_value = no2_quee["NumericValue"]
-if no2_taka is None:
-    no2_taka_value = None
-else:
-    no2_taka_value = no2_taka["NumericValue"]
-if no2_penr is None:
+try:
+    no2_penr_value = penr["data"]["iaqi"]['no2']['v']
+except:
     no2_penr_value = None
-else:
-    no2_penr_value = no2_penr["NumericValue"]
+try:
+    no2_patu_value = patu["data"]["iaqi"]['no2']['v']
+except:
+    no2_patu_value = None
+try:
+    no2_taka_value = taka["data"]["iaqi"]['no2']['v']
+except:
+    no2_taka_value = None
 
 # Calculate the maximnum value
-no2 = max(no2_penr_value,
+no2_i = max(no2_penr_value,
         no2_patu_value,
         no2_hend_value,
-        no2_quee_value,
         no2_taka_value,
-        no2_penr_value,
+        no2_glen_value,
         1)
-
+# Convert back to concentration from AQI
+if no2_i<51:
+    no2 = (no2_i - 0)*(53 - 0)/(50-0) + 0
+elif no2_i<101:
+    no2 = (no2_i - 51)*(100 - 54)/(100-51) + 54
+elif no2_i<151:
+    no2 = (no2_i - 101)*(360 - 101)/(150-101) + 101
+else:
+    no2=400
 # The data from LAWA is only updated hourly so to fill up the time
-# so, add a loop to update the agent with some noise over the data
-print("Date ",pm10_glen["DateTime"])
+# add a loop to update the agent with some noise over the data
+print("Date ",glen["data"]['time']['s'])
 print("PM10 ", pm10)
 print("NO2 ", no2)
 # Log in to Imersia's sytem
