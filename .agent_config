@@ -11,4 +11,5 @@ thingspk,http://api.thingspeak.com/update
 channel,228163
 readkey,2FNRAGGKLYXJ9CHV
 writekey,FCRT34E1B06T1N0F
+aqicn,051a203ce0a56860ac873eb898fbe06490662e60
 # ----------------------------------------------------------------------------------------------------
