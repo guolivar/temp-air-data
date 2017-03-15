@@ -1,0 +1,14 @@
+authurl,https://auth.imersia.net/api/user/login
+apiurl,https://api.imersia.net/api/2.0/
+sessionid,
+treeID,4fa485a3-1e70-41f2-81bb-666232524a28
+geohash,rcknm1d9rsvt
+email,tempproject@imersia.com
+pwd,#6DDf9f9ce4
+openweathermap,931e14fb72f4c33e24f2756a4f10b5e9
+titirangi,6232280
+thingspk,http://api.thingspeak.com/update
+channel,228163
+readkey,2FNRAGGKLYXJ9CHV
+writekey,FCRT34E1B06T1N0F
+# ----------------------------------------------------------------------------------------------------

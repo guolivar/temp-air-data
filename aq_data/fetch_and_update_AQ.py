@@ -122,13 +122,39 @@ pm10_patu = requests.get(
 pm10_taka = requests.get(
     'https://www.lawa.org.nz/umbraco/api/airservice/getLatestSample?baseUrlPageId=34260&featureOfInterest=23&indicator=pm10&timeIntervalText=Hours&timescaleText=Hourly').json()
 
+if pm10_glen is None:
+    pm10_glen_value = None
+else:
+    pm10_glen_value = pm10_glen["NumericValue"]
+if pm10_patu is None:
+    pm10_patu_value = None
+else:
+    pm10_patu_value = pm10_patu["NumericValue"]
+if pm10_hend is None:
+    pm10_hend_value = None
+else:
+    pm10_hend_value = pm10_hend["NumericValue"]
+if pm10_paku is None:
+    pm10_paku_value = None
+else:
+    pm10_paku_value = pm10_paku["NumericValue"]
+if pm10_taka is None:
+    pm10_taka_value = None
+else:
+    pm10_taka_value = pm10_taka["NumericValue"]
+if pm10_penr is None:
+    pm10_penr_value = None
+else:
+    pm10_penr_value = pm10_penr["NumericValue"]
+
 # Calculate the maximnum value
-pm10 = max(pm10_glen["NumericValue"],
-           pm10_hend["NumericValue"],
-           pm10_paku["NumericValue"],
-           pm10_penr["NumericValue"],
-           pm10_patu["NumericValue"],
-           pm10_taka["NumericValue"])
+pm10 = max(pm10_penr_value,
+        pm10_patu_value,
+        pm10_hend_value,
+        pm10_paku_value,
+        pm10_taka_value,
+        pm10_penr_value,
+        1)
 
 # Fetch the data for NO2
 no2_glen = requests.get(
@@ -143,14 +169,39 @@ no2_taka = requests.get(
     'https://www.lawa.org.nz/umbraco/api/airservice/getLatestSample?baseUrlPageId=34260&featureOfInterest=23&indicator=no2&timeIntervalText=Hours&timescaleText=Hourly').json()
 no2_patu = requests.get(
     'https://www.lawa.org.nz/umbraco/api/airservice/getLatestSample?baseUrlPageId=34260&featureOfInterest=2&indicator=no2&timeIntervalText=Hours&timescaleText=Hourly').json()
+if no2_glen is None:
+    no2_glen_value = None
+else:
+    no2_glen_value = no2_glen["NumericValue"]
+if no2_patu is None:
+    no2_patu_value = None
+else:
+    no2_patu_value = no2_patu["NumericValue"]
+if no2_hend is None:
+    no2_hend_value = None
+else:
+    no2_hend_value = no2_hend["NumericValue"]
+if no2_quee is None:
+    no2_quee_value = None
+else:
+    no2_quee_value = no2_quee["NumericValue"]
+if no2_taka is None:
+    no2_taka_value = None
+else:
+    no2_taka_value = no2_taka["NumericValue"]
+if no2_penr is None:
+    no2_penr_value = None
+else:
+    no2_penr_value = no2_penr["NumericValue"]
 
 # Calculate the maximnum value
-no2 = max(no2_glen["NumericValue"],
-          no2_hend["NumericValue"],
-          no2_quee["NumericValue"],
-          no2_penr["NumericValue"],
-          no2_patu["NumericValue"],
-          no2_taka["NumericValue"])
+no2 = max(no2_penr_value,
+        no2_patu_value,
+        no2_hend_value,
+        no2_quee_value,
+        no2_taka_value,
+        no2_penr_value,
+        1)
 
 # The data from LAWA is only updated hourly so to fill up the time
 # so, add a loop to update the agent with some noise over the data
@@ -165,8 +216,8 @@ for i in (1, 2, 3, 4, 5):
     # Extract pm10 and no2 from a wide normal distribution
     noisy_pm10 = random.lognormvariate(math.log(pm10), 0.1)
     noisy_no2 = random.lognormvariate(math.log(no2), 0.1)
-    level_pm10 = min(round(10 * (max(0,noisy_pm10-10) / 90)),10)
-    level_no2 = min(round(5 * (max(0,noisy_no2-20) / 60)),5)
+    level_pm10 = min(round(10 * (max(0,noisy_pm10-10) / 30)),10)
+    level_no2 = min(round(5 * (max(0,noisy_no2-10) / 40)),5)
     print("NO2 level ",level_no2)
     print("PM10 level ",level_pm10)
     # Update the pollution
