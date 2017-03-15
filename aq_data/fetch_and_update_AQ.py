@@ -107,12 +107,12 @@ urlGlenEden = 'https://api.waqi.info/feed/new-zealand/auckland/glen-eden/?token=
 urlPakuranga = 'https://api.waqi.info/feed/new-zealand/auckland/pakuranga/?token='
 urlPotumahoe = 'https://api.waqi.info/feed/new-zealand/auckland/patumahoe/?token='
 # Fetch the data
-glen = requests.get(urlGlenEden+aqicnkey).json()
-hend = requests.get(urlHenderson+aqicnkey).json()
-paku = requests.get(urlPakuranga+aqicnkey).json()
-penr = requests.get(urlPenrose+aqicnkey).json()
-patu = requests.get(urlPotumahoe+aqicnkey).json()
-taka = requests.get(urlTakapuna+aqicnkey).json()
+glen = requests.get(urlGlenEden + aqicnkey).json()
+hend = requests.get(urlHenderson + aqicnkey).json()
+paku = requests.get(urlPakuranga + aqicnkey).json()
+penr = requests.get(urlPenrose + aqicnkey).json()
+patu = requests.get(urlPotumahoe + aqicnkey).json()
+taka = requests.get(urlTakapuna + aqicnkey).json()
 
 # Get PM10 values
 try:
@@ -142,21 +142,21 @@ except:
 
 # Calculate the maximnum value
 pm10_i = max(pm10_penr_value,
-        pm10_patu_value,
-        pm10_hend_value,
-        pm10_paku_value,
-        pm10_taka_value,
-        pm10_penr_value,
-        1)
+             pm10_patu_value,
+             pm10_hend_value,
+             pm10_paku_value,
+             pm10_taka_value,
+             pm10_penr_value,
+             1)
 # Convert back to concentration from AQI
-if pm10_i<51:
-    pm10 = (pm10_i - 0)*(54 - 0)/(50-0) + 0
-elif pm10_i<101:
-    pm10 = (pm10_i - 51)*(154 - 55)/(100-51) + 55
-elif pm10_i<151:
-    pm10 = (pm10_i - 101)*(254 - 155)/(150-101) + 155
+if pm10_i < 51:
+    pm10 = (pm10_i - 0) * (54 - 0) / (50 - 0) + 0
+elif pm10_i < 101:
+    pm10 = (pm10_i - 51) * (154 - 55) / (100 - 51) + 55
+elif pm10_i < 151:
+    pm10 = (pm10_i - 101) * (254 - 155) / (150 - 101) + 155
 else:
-    pm10=300
+    pm10 = 300
 # Get NO2 data
 try:
     no2_glen_value = glen["data"]["iaqi"]['no2']['v']
@@ -181,23 +181,23 @@ except:
 
 # Calculate the maximnum value
 no2_i = max(no2_penr_value,
-        no2_patu_value,
-        no2_hend_value,
-        no2_taka_value,
-        no2_glen_value,
-        1)
+            no2_patu_value,
+            no2_hend_value,
+            no2_taka_value,
+            no2_glen_value,
+            1)
 # Convert back to concentration from AQI
-if no2_i<51:
-    no2 = (no2_i - 0)*(53 - 0)/(50-0) + 0
-elif no2_i<101:
-    no2 = (no2_i - 51)*(100 - 54)/(100-51) + 54
-elif no2_i<151:
-    no2 = (no2_i - 101)*(360 - 101)/(150-101) + 101
+if no2_i < 51:
+    no2 = (no2_i - 0) * (53 - 0) / (50 - 0) + 0
+elif no2_i < 101:
+    no2 = (no2_i - 51) * (100 - 54) / (100 - 51) + 54
+elif no2_i < 151:
+    no2 = (no2_i - 101) * (360 - 101) / (150 - 101) + 101
 else:
-    no2=400
+    no2 = 400
 # The data from LAWA is only updated hourly so to fill up the time
 # add a loop to update the agent with some noise over the data
-print("Date ",glen["data"]['time']['s'])
+print("Date ", glen["data"]['time']['s'])
 print("PM10 ", pm10)
 print("NO2 ", no2)
 # Log in to Imersia's sytem
@@ -208,10 +208,10 @@ for i in (1, 2, 3, 4, 5):
     # Extract pm10 and no2 from a wide normal distribution
     noisy_pm10 = random.lognormvariate(math.log(pm10), 0.1)
     noisy_no2 = random.lognormvariate(math.log(no2), 0.1)
-    level_pm10 = min(round(10 * (max(0,noisy_pm10-10) / 30)),10)
-    level_no2 = min(round(5 * (max(0,noisy_no2-10) / 40)),5)
-    print("NO2 level ",level_no2)
-    print("PM10 level ",level_pm10)
+    level_pm10 = min(round(10 * (max(0, noisy_pm10 - 10) / 30)), 10)
+    level_no2 = min(round(5 * (max(0, noisy_no2 - 0) / 20)), 5)
+    print("NO2 level ", level_no2)
+    print("PM10 level ", level_pm10)
     # Update the pollution
     # Post a value to set the pollution level (0 to 5) and trigger the devices
     # watching
@@ -225,6 +225,6 @@ for i in (1, 2, 3, 4, 5):
     time.sleep(8)
 print("--- %s seconds ---" % (time.time() - start_time))
 # Update thingspeak channel
-options = {'api_key':writekey,'field1':pm10,'field2':no2}
-req = requests.post(thingspk,data=options)
+options = {'api_key': writekey, 'field1': pm10, 'field2': no2}
+req = requests.post(thingspk, data=options)
 print(req)
