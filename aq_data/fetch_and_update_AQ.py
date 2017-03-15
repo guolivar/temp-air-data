@@ -61,6 +61,9 @@ readkey = settings_line[1]
 # Thinkgspeak writekey
 settings_line = settings_file.readline().rstrip('\n').split(',')
 writekey = settings_line[1]
+# AQICN API key
+settings_line = settings_file.readline().rstrip('\n').split(',')
+aqicnkey = settings_line[1]
 
 
 # Close the settings file
@@ -97,14 +100,13 @@ def SendCommand(command, parameters):
 # ----------------------------------------------------------------------------------------------------
 
 '''
-    Sites ID
-    Glen Eden:  67 (pm10, no2)
-    Queen St:   9 (no2)
-    Henderson: 5 (pm10, no2)
-    Pakuranga:  1 (pm10)
-    Penrose:    7 (pm10, no2, so2)
-    Patumahoe:   2 (pm10, no2)
-    Takapuna:   23 (pm10, no2)
+    Sites URLs
+    Takapuna:   https://api.waqi.info/feed/new-zealand/auckland/takapuna/?token=
+    Penrose:    https://api.waqi.info/feed/new-zealand/auckland/penrose/?token=
+    Henderson:  https://api.waqi.info/feed/new-zealand/auckland/henderson/?token=
+    Glen Eden:  https://api.waqi.info/feed/new-zealand/auckland/glen-eden/?token=
+    Pakuranga:  https://api.waqi.info/feed/new-zealand/auckland/pakuranga/?token=
+    Potumahoe:  https://api.waqi.info/feed/new-zealand/auckland/patumahoe/?token=
 '''
 # Fetch the data for PM10
 pm10_glen = requests.get(
