@@ -141,22 +141,14 @@ except:
     pm10_taka_value = None
 
 # Calculate the maximnum value
-pm10_i = max(pm10_penr_value,
+pm10 = max(pm10_penr_value,
              pm10_patu_value,
              pm10_hend_value,
              pm10_paku_value,
              pm10_taka_value,
              pm10_penr_value,
              1)
-# Convert back to concentration from AQI
-if pm10_i < 51:
-    pm10 = (pm10_i - 0) * (54 - 0) / (50 - 0) + 0
-elif pm10_i < 101:
-    pm10 = (pm10_i - 51) * (154 - 55) / (100 - 51) + 55
-elif pm10_i < 151:
-    pm10 = (pm10_i - 101) * (254 - 155) / (150 - 101) + 155
-else:
-    pm10 = 300
+
 # Get NO2 data
 try:
     no2_glen_value = glen["data"]["iaqi"]['no2']['v']
@@ -180,22 +172,14 @@ except:
     no2_taka_value = None
 
 # Calculate the maximnum value
-no2_i = max(no2_penr_value,
+no2 = max(no2_penr_value,
             no2_patu_value,
             no2_hend_value,
             no2_taka_value,
             no2_glen_value,
             1)
-# Convert back to concentration from AQI
-if no2_i < 51:
-    no2 = (no2_i - 0) * (53 - 0) / (50 - 0) + 0
-elif no2_i < 101:
-    no2 = (no2_i - 51) * (100 - 54) / (100 - 51) + 54
-elif no2_i < 151:
-    no2 = (no2_i - 101) * (360 - 101) / (150 - 101) + 101
-else:
-    no2 = 400
-# The data from LAWA is only updated hourly so to fill up the time
+
+# The data is only updated hourly so to fill up the time
 # add a loop to update the agent with some noise over the data
 print("Date ", glen["data"]['time']['s'])
 print("PM10 ", pm10)
@@ -208,7 +192,7 @@ for i in (1, 2, 3, 4, 5):
     # Extract pm10 and no2 from a wide normal distribution
     noisy_pm10 = random.lognormvariate(math.log(pm10), 0.1)
     noisy_no2 = random.lognormvariate(math.log(no2), 0.1)
-    level_pm10 = min(round(10 * (max(0, noisy_pm10 - 5) / 30)), 10)
+    level_pm10 = min(round(10 * (max(0, noisy_pm10 - 5) / 50)), 10)
     level_no2 = min(round(5 * (max(0, noisy_no2 - 0) / 20)), 5)
     print("NO2 level ", level_no2)
     print("PM10 level ", level_pm10)
